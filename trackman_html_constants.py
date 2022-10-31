@@ -1,3 +1,5 @@
+class_name_date = 'date'
+
 table_name = 'table-with-shots'
 
 report = 'MultiGroupReport'
