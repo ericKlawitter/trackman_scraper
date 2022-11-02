@@ -22,3 +22,7 @@ class_name_shot_detail = 'row-with-shot-details'
 class_name_shot_averages = 'average-values'
 
 class_name_shot_consistency = 'consistency-values'
+
+data_points = ['Club Speed', 'Attack Ang.', 'Club Path', 'Face To Path', 'Face Ang.', 'Carry', 'Swing Dir.', 'Height',
+               'Low Point', 'Imp. Offset', 'Imp. Height', 'Side', 'Tempo', 'Spin Axis', 'Smash Fac.', 'Dyn. Loft', 'Spin Rate',
+               'Side Tot.', 'Total', 'Ball Speed']

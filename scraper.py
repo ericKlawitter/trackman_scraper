@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
 from urllib.parse import urlparse
+from urllib.parse import parse_qs
 from trackman_output import TrackmanOutput
 
 
@@ -17,12 +18,16 @@ def process_row(row, date, report_id):
     club = row.find_element(By.CLASS_NAME, div_id.class_name_row_club_text).text
     stats_element = row.find_element(By.CLASS_NAME, div_id.class_name_stat_names)
     stats = [stat.text for stat in stats_element.find_elements(By.CLASS_NAME, div_id.class_name_stat_name)]
-    output = TrackmanOutput(date, report_id, stats, club)
+    output = TrackmanOutput(date, report_id, club)
     shots = row.find_elements(By.CLASS_NAME, div_id.class_name_shot_detail)
-    for shot in shots:
-        # 0th row is shot_num, 1st is visibility button, second is video, third is share
+    for i, shot in enumerate(shots):
+        # 0th Column is shot_num, 1st is visibility button, second is video, third is share
         shot_data = [td.text for i, td in enumerate(shot.find_elements(By.TAG_NAME, 'td')) if i > 3]
-        output.add_shot(shot_data)
+        data = dict(zip(stats, shot_data))
+        data['ShotNum'] = i
+        data['Date'] = date
+        data['ReportId'] = report_id
+        output.add_shot(data)
 
 
     averages_element = row.find_element(By.CLASS_NAME, div_id.class_name_shot_averages)
@@ -39,8 +44,7 @@ def process_row(row, date, report_id):
 
 
 def scrape(url):
-    report_id = urlparse(url).query
-    print(report_id)
+    report_id = parse_qs(urlparse(url).query)['r'][0]
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     capa = DesiredCapabilities.CHROME
