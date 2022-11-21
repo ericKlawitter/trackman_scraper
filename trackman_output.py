@@ -24,13 +24,14 @@ class TrackmanOutput:
     def combine_existing_rows(self):
         with open(self.file_name, 'r') as original_file:
             reader = csv.DictReader(original_file, fieldnames=self.headers)
-            next(reader, None) # skip header for existing file
+            next(reader, None)  # skip header for existing file
             keys = {(self.report_id, self.date, shot['ShotNum']): shot for shot in self.shots}
             combined_shots = []
             for row in reader:
                 key = (row['ReportId'], row['Date'], row['ShotNum'])
                 if key in keys:
-                    combined_shots.append(row.update(keys[key]))
+                    row.update(keys[key])
+                    combined_shots.append(row)
                     del keys[key]
                 else:
                     combined_shots.append(row)
@@ -48,20 +49,5 @@ class TrackmanOutput:
 
     def add_shot(self, stats):
         self.shots.append(stats)
-
-
-"""
-    def append_file(self):
-        with open(self.file_name + '_TMPT', 'r') as original_file, open(self.file_name, 'a') as new_file:
-            writer = csv.DictWriter(output_file, fieldnames=self.headers)
-            reader = csv.DictReader(output_file, fieldnames=self.headers)
-            for row in reader:
-                for shot in self.shots:
-                    if row['ReportId'] == self.report_id and row['Date'] == self.date and row['ShotNum'] == shot['ShotNum']:
-                        row.update(shot)
-                        writer.writerow(row)
-                    else:
-                        writer.writerow(shot)
-"""
 
 

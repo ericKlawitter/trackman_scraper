@@ -24,21 +24,21 @@ def process_row(row, date, report_id):
         # 0th Column is shot_num, 1st is visibility button, second is video, third is share
         shot_data = [td.text for i, td in enumerate(shot.find_elements(By.TAG_NAME, 'td')) if i > 3]
         data = dict(zip(stats, shot_data))
-        data['ShotNum'] = i
+        data['ShotNum'] = str(i)
         data['Date'] = date
         data['ReportId'] = report_id
         output.add_shot(data)
 
 
-    averages_element = row.find_element(By.CLASS_NAME, div_id.class_name_shot_averages)
+    #averages_element = row.find_element(By.CLASS_NAME, div_id.class_name_shot_averages)
     # first column is label 'Average', second is share button
-    averages = [td.text for i, td in enumerate(averages_element.find_elements(By.TAG_NAME, 'td')) if i > 1]
-    print(averages)
+    #averages = [td.text for i, td in enumerate(averages_element.find_elements(By.TAG_NAME, 'td')) if i > 1]
+    #print(averages)
 
-    std_dev_element = row.find_element(By.CLASS_NAME, div_id.class_name_shot_consistency)
+    #std_dev_element = row.find_element(By.CLASS_NAME, div_id.class_name_shot_consistency)
     # first column is label 'Consistency'
-    std_devs = [td.text for i, td in enumerate(std_dev_element.find_elements(By.TAG_NAME, 'td')) if i > 0]
-    print(std_devs)
+    #std_devs = [td.text for i, td in enumerate(std_dev_element.find_elements(By.TAG_NAME, 'td')) if i > 0]
+    #print(std_devs)
     
     output.write()
 
