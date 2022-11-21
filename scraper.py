@@ -42,6 +42,16 @@ def process_row(row, date, report_id):
     
     output.write()
 
+def get_urls(report_id):
+    base_url = 'https://mytrackman.com/system/dynamic-report?r=' + report_id + \
+               '&dm=c&nd=false&op=true&sro=false&do=true&to=true&vo=true&cdo=true&ot=h&ov=d&mp%5B%5D='
+    prefix = '&mp%5B%5D='
+
+    stats1 = [prefix + x for x in ['DynamicLoft', 'FaceAngle', 'SpinAxis', 'SwingDirection', 'Height', 'Side',
+              'LowPointDistance', 'ImpactHeight', 'ImpactOffset']]
+    stats2 = [prefix + x for x in ['ClubPath', 'FaceToPath', 'SmashFactor', 'ClubSpeed', 'BallSpeed', 'Carry', 'SpinRate',
+              'AttackAngle', 'Total']]
+    return [base_url + ''.join(stats1), base_url + ''.join(stats2)]
 
 def scrape(url):
     report_id = parse_qs(urlparse(url).query)['r'][0]
@@ -51,14 +61,15 @@ def scrape(url):
     capa["pageLoadStrategy"] = "none"
     driver = webdriver.Chrome(chrome_options=options, desired_capabilities=capa)
     driver.set_window_size(1440, 900)
-    driver.get(url)
-    wait = WebDriverWait(driver, 15)
+    for url in get_urls(report_id):
+        driver.get(url)
+        wait = WebDriverWait(driver, 15)
 
-    header = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, div_id.class_name_date)))
-    date = header.text.replace('/', '-')
+        header = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, div_id.class_name_date)))
+        date = header.text.replace('/', '-')
 
-    results = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, div_id.class_name_results)))
+        results = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, div_id.class_name_results)))
 
-    rows = results.find_elements(By.CLASS_NAME, div_id.class_name_results_table)
-    for row in rows:
-        process_row(row, date, report_id)
+        rows = results.find_elements(By.CLASS_NAME, div_id.class_name_results_table)
+        for row in rows:
+            process_row(row, date, report_id)
