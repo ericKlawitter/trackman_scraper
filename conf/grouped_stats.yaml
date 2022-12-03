@@ -1,0 +1,32 @@
+clubs:
+  - all:
+    - height:
+      - median
+    - path:
+      - stdev
+      - median
+    - faceToPath:
+      - stdev
+      - median
+    - clubSpeed:
+      - median
+    - ballSpeed:
+        - median
+    - impactHeight:
+        - median
+        - stdev
+    - impactOffset:
+        - median
+        - stdev
+    - swingDir:
+        - median
+    - carry:
+        - median
+        - stdev
+    - side:
+        - median
+        - stdev
+    - spinRate:
+        - median
+    
+
