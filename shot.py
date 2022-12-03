@@ -11,3 +11,8 @@ class Shot:
     @staticmethod
     def from_row(row):
         return Shot(row['Club'], row['ReportId'], row['ShotNum'], row)
+
+class GroupedShot:
+    def __init__(self, club, report_id):
+        self.club = club
+        self.report_id = report_id
