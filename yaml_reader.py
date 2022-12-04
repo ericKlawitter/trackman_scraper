@@ -34,7 +34,6 @@ def group_stats(shots):
 '''
 
 
-
 def get_grouped_stats():
     file_name="conf/grouped_stats.yaml"
     with open(file_name, 'r') as stream:
@@ -43,3 +42,12 @@ def get_grouped_stats():
             return yaml.safe_load(stream)
         except yaml.YAMLError as e:
             print("error loading yaml", e)
+
+
+def get_urls():
+    file_name = "conf/urls.yaml"
+    with open(file_name, 'r') as stream:
+        try:
+            return yaml.safe_load(stream)['urls']
+        except yaml.YAMLError as e:
+            print('error loading url yaml', e)
