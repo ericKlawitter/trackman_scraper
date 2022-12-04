@@ -2,3 +2,4 @@ venv/
 .idea/
 __pycache__
 out/
+conf/urls.yaml
