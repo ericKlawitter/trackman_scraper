@@ -5,11 +5,11 @@ import os
 
 
 class TrackmanOutput:
-    def __init__(self, date, report_id, club):
+    def __init__(self, date, report_id, club, shots):
         self.date = date
         self.file_name = 'out/' + club + '.csv'
         # stat headers - e.g. ball speed, club path, etc. Assume all the same for each club for now
-        self.shots = []
+        self.shots = shots
         self.headers = ['Date', 'ReportId', 'ShotNum'] + data_points
         self.club = club
         self.report_id = report_id
@@ -47,7 +47,5 @@ class TrackmanOutput:
             for shot in self.shots:
                 writer.writerow(shot)
 
-    def add_shot(self, stats):
-        self.shots.append(stats)
 
 
