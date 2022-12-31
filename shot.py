@@ -5,6 +5,9 @@ class Shot:
         self.shot_num = shot_num
         self.date = date
         self.stats = properties
+        self.stats['ReportId'] = report_id
+        self.stats['ShotNum'] = shot_num
+        self.stats['Date'] = date
 
     def key(self):
         return (self.club, self.report_id, self.shot_num, self.date)

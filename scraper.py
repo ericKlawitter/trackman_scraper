@@ -9,7 +9,6 @@ from urllib.parse import parse_qs
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
-import yaml_reader
 import trackman_html_constants as div_id
 from shot import Shot
 

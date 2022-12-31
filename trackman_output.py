@@ -3,14 +3,23 @@ from pathlib import Path
 from trackman_html_constants import data_points
 import os
 
+headers = ['Date', 'ReportId', 'ShotNum'] + data_points
+
+
+def new_csv_writer(output_file):
+    return csv.DictWriter(output_file, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL,
+                                    fieldnames=headers)
+
+def new_csv_reader(input_file):
+    return csv.DictReader(input_file, fieldnames=headers)
+
 
 class TrackmanOutput:
-    def __init__(self, date, report_id, club, shots):
+    def __init__(self, date, report_id, club, shots, appended_file_name=''):
         self.date = date
-        self.file_name = 'out/' + club + '.csv'
+        self.file_name = 'out/' + club + appended_file_name + '.csv'
         # stat headers - e.g. ball speed, club path, etc. Assume all the same for each club for now
-        self.shots = shots
-        self.headers = ['Date', 'ReportId', 'ShotNum'] + data_points
+        self.shots = [shot.stats for shot in shots]
         self.club = club
         self.report_id = report_id
 
@@ -23,7 +32,7 @@ class TrackmanOutput:
 
     def combine_existing_rows(self):
         with open(self.file_name, 'r') as original_file:
-            reader = csv.DictReader(original_file, fieldnames=self.headers)
+            reader = new_csv_reader(original_file)
             next(reader, None)  # skip header for existing file
             keys = {(self.report_id, self.date, shot['ShotNum']): shot for shot in self.shots}
             combined_shots = []
@@ -38,14 +47,10 @@ class TrackmanOutput:
             combined_shots.extend(keys.values())
             return combined_shots
 
-
     def write_new_file(self):
         with open(self.file_name, 'w') as output_file:
-            writer = csv.DictWriter(output_file, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL,
-                                    fieldnames=self.headers)
+            writer = new_csv_writer(output_file)
             writer.writeheader()
             for shot in self.shots:
                 writer.writerow(shot)
-
-
 
