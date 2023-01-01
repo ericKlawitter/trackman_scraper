@@ -81,4 +81,4 @@ def get_all_shots(url):
                     parsed_shots[shot.key()] |= shot
                 else:
                     parsed_shots[shot.key] = shot
-        return parsed_shots
+        return parsed_shots.values()

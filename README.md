@@ -27,4 +27,16 @@ Currently the supported stats are:
 * Dynamic Loft
 * Low Point Distance
 
+# Grouped Stats:
+Grouped stats are supported and can be defined in `conf/grouped_stats.yaml`. The supported functions for grouped aggregate stats are:
+* median
+* stdev
+* max
+* min
+* avg 
 
+In addition to stats/funcitons combinations, `groups` must be defined in yaml. The following groups are supported: 
+* shots - number of shots to aggregate per stat/function
+* daysBack - number of daysBack to aggregate reports per stat/function
+
+Both of these support arrays and the program will output all stats/functions for each group. 

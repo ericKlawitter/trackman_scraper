@@ -1,0 +1,16 @@
+---
+clubs:
+  all:
+    stats:
+      Height:
+        - median
+      Club_Path:
+        - stdev
+        - median
+    groups:
+      shots:
+        - 15
+        - 30
+      daysBack:
+        - 10
+        - 20

@@ -9,11 +9,24 @@ grouped_stats_conf = {
     'avg': statistics.mean,
 }
 
-
+# list of groupings based on each daysBack/shotNum defined in YAML
 def group_stats(config, shots):
-    grouped_stats = []
     if 'clubs' in config:
         all = config['clubs']['all'] ## TODO support by club settings
+        if 'stats' in all and 'groups' in all:
+            stats = all['stats'].items()  # e.g. Height: [stddev, median]
+            groups = all['groups']
+            if 'shots' in groups:
+                shots_config = groups['shots']
+                # remember, shots has all clubs. Need to group by clubs
+                ordered_shots = sorted(shots, key=lambda x: (x.date, None))
+                for num_shots in shots_config:
+                    print(num_shots)
+            if 'daysBack' in groups:
+                print(groups['daysBack'])
+            return
+        else:
+            print("both 'stats' and 'groups' need to be defined in gruped yaml")
         if 'stats' in all:
             process_stats(all['stats'], shots)
         if 'groups' in all:
