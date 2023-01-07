@@ -9,6 +9,17 @@ grouped_stats_conf = {
     'avg': statistics.mean,
 }
 
+def get_by_club_shots(all_shots):
+    by_club_shots = defaultdict(list)
+    for shot in all_shots:
+        by_club_shots[shot.club].append(shot)
+    for club, club_shots in by_club_shots.items():
+        sorted_club_shots = sorted(club_shots, key=lambda x: (x.date, x.shot_num))
+        sorted_club_shots.reverse()
+        by_club_shots[club] = sorted_club_shots
+    return by_club_shots
+
+
 # list of groupings based on each daysBack/shotNum defined in YAML
 def group_stats(config, shots):
     if 'clubs' in config:
@@ -16,17 +27,18 @@ def group_stats(config, shots):
         if 'stats' in all and 'groups' in all:
             stats = all['stats'].items()  # e.g. Height: [stddev, median]
             groups = all['groups']
+            by_club_shots = get_by_club_shots(shots)
             if 'shots' in groups:
-                shots_config = groups['shots']
-                # remember, shots has all clubs. Need to group by clubs
-                ordered_shots = sorted(shots, key=lambda x: (x.date, None))
-                for num_shots in shots_config:
-                    print(num_shots)
+
+                for num_shots in groups['shots']:
+                    pass
+                    # decision - both shots and daysback groupings create a single, NEW file with each file containing
+                    # every grouping for every club.
             if 'daysBack' in groups:
                 print(groups['daysBack'])
             return
         else:
-            print("both 'stats' and 'groups' need to be defined in gruped yaml")
+            print("both 'stats' and 'groups' need to be defined in grouped yaml")
         if 'stats' in all:
             process_stats(all['stats'], shots)
         if 'groups' in all:
