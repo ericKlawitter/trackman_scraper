@@ -1,8 +1,8 @@
-import requests
-from lxml import html
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
@@ -10,9 +10,6 @@ from trackman_output import TrackmanOutput
 
 
 import trackman_html_constants as div_id
-from selenium import webdriver
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-
 
 def process_row(row, date, report_id):
     club = row.find_element(By.CLASS_NAME, div_id.class_name_row_club_text).text
@@ -43,7 +40,7 @@ def process_row(row, date, report_id):
     output.write()
 
 def get_urls(report_id):
-    base_url = 'https://mytrackman.com/system/dynamic-report?r=' + report_id + \
+    base_url = 'https://web-dynamic-reports.trackmangolf.com/?r=' + report_id + \
                '&dm=c&nd=false&op=true&sro=false&do=true&to=true&vo=true&cdo=true&ot=h&ov=d&mp%5B%5D='
     prefix = '&mp%5B%5D='
 
@@ -55,11 +52,12 @@ def get_urls(report_id):
 
 def scrape(url):
     report_id = parse_qs(urlparse(url).query)['r'][0]
-    options = webdriver.ChromeOptions()
-    options.add_argument('headless')
-    capa = DesiredCapabilities.CHROME
-    capa["pageLoadStrategy"] = "none"
-    driver = webdriver.Chrome(chrome_options=options, desired_capabilities=capa)
+
+    options = Options()
+    options.add_argument("--headless=new")
+    options.page_load_strategy = 'none'
+
+    driver = webdriver.Chrome(options=options)
     driver.set_window_size(1440, 900)
     for url in get_urls(report_id):
         driver.get(url)
