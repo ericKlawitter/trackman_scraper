@@ -1,0 +1,10 @@
+name: my_app_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - requests=2.32
+  - lxml=5
+  - selenium=4.28.1
+  - selenium-manager=0.4.28
