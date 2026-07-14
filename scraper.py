@@ -51,7 +51,13 @@ def get_urls(report_id):
     return [base_url + ''.join(stats1), base_url + ''.join(stats2)]
 
 def scrape(url):
-    report_id = parse_qs(urlparse(url).query)['r'][0]
+    query_params = parse_qs(urlparse(url).query)
+    if 'ReportId' in query_params:
+        report_id = query_params['ReportId'][0]
+    elif 'r' in query_params:
+        report_id = query_params['r'][0]
+    else:
+        raise KeyError("Could not find ReportId or r in the provided URL string!")
 
     options = Options()
     options.add_argument("--headless=new")
